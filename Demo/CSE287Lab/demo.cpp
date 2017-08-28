@@ -51,8 +51,8 @@ int main(int argc, char** argv) {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	float white[] = { 1,1,1,1 };
-	float darkgray[] = { 0.2,0.2,0.2,1 };
-	float overhead[] = { 0,400,0,1 };
+	float darkgray[] = { 0.2f, 0.2f, 0.2f, 1 };
+	float overhead[] = { 0, 400, 0, 1 };
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, darkgray);
 	glLightfv(GL_LIGHT0, GL_POSITION, overhead);
