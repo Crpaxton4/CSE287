@@ -60,7 +60,7 @@ void open5x5Square(int x, int y, color C) {
 
 enum Direction { NE, SE, SW, NW };
 
-void diagonalLine(glm::vec2 startPt, int numPixels, Direction dir, color C) {
+void diagonalLine(const glm::vec2 &startPt, int numPixels, Direction dir, color C) {
 	// Fill in
 }
 
