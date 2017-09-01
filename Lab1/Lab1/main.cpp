@@ -18,8 +18,8 @@ void swap(int &x, int &y) {
 
 /*
 * Takes the passed color and converts it to a similar color, but
-* darker. For example, the color (100, 200, 220) would be transformed
-* to (50, 100, 110).
+* darker. For example, the color (1.0f, 0.8f, 0.5f) would be transformed
+* to (0.5f, 0.4f, 0.25f).
 * The original color is left unchanged.
 */
 color darken(color C) {
