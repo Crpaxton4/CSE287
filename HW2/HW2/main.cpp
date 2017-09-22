@@ -1,7 +1,6 @@
 #include <cmath>
 #include <glm/glm.hpp>
 #include "BasicIncludesAndDefines.h"
-//#include "utitlities.h"
 //#include "parametricLine.h"
 //#include "plane.h"
 //#include "ellipsoid.h"
