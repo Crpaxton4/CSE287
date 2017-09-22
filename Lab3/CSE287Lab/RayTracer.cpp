@@ -48,6 +48,7 @@ glm::vec2 RayTracer::getProjectionPlaneCoordinates(const int x, const int y) {
 	glm::vec2 uvScalarValues;
 
 	// TODO
+	return glm::vec2(0, 0);
 }
 
 void RayTracer::setOrthoRayOriginAndDirection(const int x, const int y) {
