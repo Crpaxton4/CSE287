@@ -32,6 +32,7 @@ HitRecord Plane::findClosestIntersection(const glm::vec3 &rayOrigin, const glm::
 		hitRecord.t = num / denom;
 		hitRecord.material = material;
 		hitRecord.interceptPoint = rayOrigin + hitRecord.t * rayDirection;
+		hitRecord.surfaceNormal = n;
 		if (hitRecord.t <= 0)
 			hitRecord.t = FLT_MAX;
 	}
