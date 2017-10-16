@@ -8,7 +8,8 @@ QuadricSurface::QuadricSurface(const QuadricParameters &params,
 		F(params.F), G(params.G), H(params.H), I(params.I), J(params.J) {
 }
 
-glm::vec3 QuadricSurface::normal(const glm::vec3 &pt) {
+glm::vec3 QuadricSurface::normal(const glm::vec3 &P) {
+	glm::vec3 pt = P - center;
 	glm::vec3 normal(2 * A * pt.x + D * pt.y + E * pt.z + G,
 					2 * B * pt.y + D * pt.x + F * pt.z + H,
 					2 * C * pt.z + E * pt.x + F * pt.y + I);
