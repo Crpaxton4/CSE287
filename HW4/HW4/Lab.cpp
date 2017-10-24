@@ -13,6 +13,9 @@ bool lightIsOn[2] = { false, false };
 float FOV = 40;
 glm::vec3 attenuationParams[2] = { glm::vec3(1,0,0), glm::vec3(1,0,0) };
 
+void print(const glm::vec3 &v) {
+	std::cout << v.x << ' ' << v.y << ' ' << v.z << std::endl;
+}
 
 // Frame buffer for holding pixel color and depth values
 FrameBuffer frameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -121,12 +124,12 @@ void KeyboardCB(unsigned char key, int x, int y) {
 	case 'W':	sl = (SpotLight*)(lights[1].get());
 				incrementClamp(FOV, 5.0f, 0, 70.0f);
 				break;
-	case 'c':	incrementClamp(attenuationParams[0].x, -INC, 0.0f, 10.0f); break;
-	case 'C':	incrementClamp(attenuationParams[0].x, INC, 0.0f, 10.0f); break;
-	case 'l':	incrementClamp(attenuationParams[1].y, -INC, 0.0f, 10.0f); break;
-	case 'L':	incrementClamp(attenuationParams[1].y, INC, 0.0f, 10.0f); break;
-	case 'q':	incrementClamp(attenuationParams[2].z, -INC, 0.0f, 10.0f); break;
-	case 'Q':	incrementClamp(attenuationParams[2].z, INC, 0.0f, 10.0f); break;
+	case 'c':	incrementClamp(attenuationParams[currLight].x, -INC, 0.0f, 10.0f); break;
+	case 'C':	incrementClamp(attenuationParams[currLight].x, INC, 0.0f, 10.0f); break;
+	case 'l':	incrementClamp(attenuationParams[currLight].y, -INC, 0.0f, 10.0f); break;
+	case 'L':	incrementClamp(attenuationParams[currLight].y, INC, 0.0f, 10.0f); break;
+	case 'q':	incrementClamp(attenuationParams[currLight].z, -INC, 0.0f, 10.0f); break;
+	case 'Q':	incrementClamp(attenuationParams[currLight].z, INC, 0.0f, 10.0f); break;
 	case 'R':
 	case 'r':	attenuationIsOn[currLight]= false;
 				attenuationParams[currLight] = glm::vec3(1.0f, 0.0f, 0.0f);
@@ -138,6 +141,8 @@ void KeyboardCB(unsigned char key, int x, int y) {
 	default:
 		std::cout << key << " key pressed." << std::endl;
 	}
+	print(attenuationParams[0]);
+	print(attenuationParams[1]);
 	PrintLightInfo();
 	glutPostRedisplay();
 
