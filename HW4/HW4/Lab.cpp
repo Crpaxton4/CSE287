@@ -96,7 +96,6 @@ void buildScene() {
 	lights.push_back(light2);
 }
 
-
 void PrintLightInfo() {
 	std::cout << "Light #1" << std::endl;
 	std::cout << *(lights[0]) << std::endl;
