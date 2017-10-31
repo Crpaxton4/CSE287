@@ -55,7 +55,7 @@ void drawBresenhamLine(const glm::vec3 &p1, const glm::vec3 &p2, const color &rg
 
 	setPixel(x0, y0, rgba);
 
-	while (x0 != x1 && y0 != y1) {
+	while (x0 != x1 || y0 != y1) {
 		int e2 = err << 1;
 
 		if (e2 > -dy) {
