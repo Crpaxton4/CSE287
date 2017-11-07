@@ -13,9 +13,6 @@ bool lightIsOn[2] = { false, false };
 float FOV = 40;
 glm::vec3 attenuationParams[2] = { glm::vec3(1,0,0), glm::vec3(1,0,0) };
 
-void print(const glm::vec3 &v) {
-	std::cout << v.x << ' ' << v.y << ' ' << v.z << std::endl;
-}
 
 // Frame buffer for holding pixel color and depth values
 FrameBuffer frameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -41,7 +38,8 @@ static void RenderSceneCB() {
 //	frameBuffer.clearColorAndDepthBuffers(); // Not necessary for ray tracing
 
 	// Ray trace the scene to determine the color of all the pixels in the scene
-	rayTrace.raytraceScene(surfaces, lights);
+	rayTrace.raytraceScene(surfaces, lights, attenuationIsOn, attenuationParams);
+	//(lightIsOn[currLight]) ? attenuationParams[currLight] :
 
 	// Display the color buffer
 	frameBuffer.showColorBuffer();
@@ -70,21 +68,29 @@ static void ResizeCB(int width, int height) {
 } // end ResizeCB
 
 // Create light sources
-std::shared_ptr<PositionalLight> light1 = std::make_shared<PositionalLight>(glm::vec3(0, 10, 0));
-std::shared_ptr<SpotLight> light2 = std::make_shared<SpotLight>(glm::vec3(0, 10, 0));
+Material positionalLightProperties(color(1.0f, 1.0f, 1.0f, 1.0f), color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, color(1.0f, 1.0f, 1.0f, 1.0f));
+Material spoghtLightProperties(color(1.0f, 1.0f, 1.0f, 1.0f), color(1.0f, 1.0f, 1.0f, 1.0f), 0.0f, color(1.0f, 1.0f, 1.0f, 1.0f));
+std::shared_ptr<PositionalLight> light1 = std::make_shared<PositionalLight>(glm::vec3(0, 10, 0), positionalLightProperties);
+std::shared_ptr<SpotLight> light2 = std::make_shared<SpotLight>(glm::vec3(0, 10, 0), FOV, spoghtLightProperties);
 
 void buildScene() {
 	// Initialize random seed - used to create random colors
 	srand((unsigned int)time(NULL));
 
+	Material bronze(color(0.714f, 0.4284f, 0.18144f, 1.0f), color(0.393548f, 0.271906f, 0.166721f, 1.0f), 26.2f, color(0.2125f, 0.1275f, 0.054f, 1.0f));
+	Material gold(color(0.75164f, 0.60648f, 0.22648f, 1.0f), color(0.628281f, 0.555802f, 0.366065f, 1.0f), 51.2f, color(0.24725f, 0.1995f, 0.0745f, 1.0f));
+	Material silver(color(0.50754f, 0.50754f, 0.50754f, 1.0f), color(0.508273f, 0.508273f, 0.508273f, 1.0f), 51.2f, color(0.19225f, 0.19225f, 0.19225f, 1.0f));
+	Material redPlastic(color(0.5f, 0.0f, 0.01f, 1.0f), color(0.7f, 0.6f, 0.6f, 1.0f), 32.0f, color(0.0f, 0.0f, 0.0f, 1.0f));
+
 	// Create objects in the scene
-	std::shared_ptr<Plane> plane = std::make_shared <Plane>(glm::vec3(0.0f, -4.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), color(0.45f, 0.4f,0.1f, 1.0f));
+	std::shared_ptr<Plane> plane = std::make_shared <Plane>(glm::vec3(0.0f, -4.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), bronze);
 
 	QuadricParameters sphereParams = { 1.0f, 1.0f, 1.0f, 0, 0, 0, 0, 0, 0, -4 };
-	std::shared_ptr<QuadricSurface> sphere = std::make_shared<QuadricSurface>(sphereParams, glm::vec3(-6.0f, -2.0f, -2.0f), color(1.0f, 1.0f, 0.0f, 1.0f));
-	std::shared_ptr<CylinderY> cylinder = std::make_shared<CylinderY>(glm::vec3(5.0f, -3.0f, 0.0f), 3.0f, 2.0f, color(0.7f, 0.7f, 0.7f, 1.0f));
+	
+	std::shared_ptr<QuadricSurface> sphere = std::make_shared<QuadricSurface>(sphereParams, glm::vec3(-6.0f, -2.0f, -2.0f), gold);
+	std::shared_ptr<CylinderY> cylinder = std::make_shared<CylinderY>(glm::vec3(5.0f, -3.0f, 0.0f), 3.0f, 2.0f, silver);
 	QuadricParameters hyperParams = { 1.0f, 0.0f, 1.0f, 0, 0, 0, 0, 3, 0, 0 };
-	std::shared_ptr<QuadricSurface> paraboloid = std::make_shared<QuadricSurface>(hyperParams, glm::vec3(0.0f, 3.0f, -5.0f), color(1.0f, 0.0f, 0.0f, 1.0f));
+	std::shared_ptr<QuadricSurface> paraboloid = std::make_shared<QuadricSurface>(hyperParams, glm::vec3(0.0f, 3.0f, -5.0f), redPlastic);
 
 	surfaces.push_back(plane);
 	surfaces.push_back(cylinder);
@@ -95,6 +101,7 @@ void buildScene() {
 	lights.push_back(light1);
 	lights.push_back(light2);
 }
+
 
 void PrintLightInfo() {
 	std::cout << "Light #1" << std::endl;
@@ -119,9 +126,11 @@ void KeyboardCB(unsigned char key, int x, int y) {
 	case '2':	currLight = 1; break;
 	case 'w':	sl = (SpotLight*)(lights[1].get());
 				incrementClamp(FOV, -5.0f, 0, 70.0f);
+				sl->FOV = FOV;
 				break;
 	case 'W':	sl = (SpotLight*)(lights[1].get());
 				incrementClamp(FOV, 5.0f, 0, 70.0f);
+				sl->FOV = FOV;
 				break;
 	case 'c':	incrementClamp(attenuationParams[currLight].x, -INC, 0.0f, 10.0f); break;
 	case 'C':	incrementClamp(attenuationParams[currLight].x, INC, 0.0f, 10.0f); break;
@@ -140,8 +149,6 @@ void KeyboardCB(unsigned char key, int x, int y) {
 	default:
 		std::cout << key << " key pressed." << std::endl;
 	}
-	print(attenuationParams[0]);
-	print(attenuationParams[1]);
 	PrintLightInfo();
 	glutPostRedisplay();
 

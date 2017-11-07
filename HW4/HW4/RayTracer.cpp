@@ -75,38 +75,51 @@ void RayTracer::setPerspectiveRayOriginAndDirection(const int x, const int y) {
 }
 
 void RayTracer::raytraceScene(const std::vector<std::shared_ptr<Surface>> & surfaces,
-					const std::vector<std::shared_ptr<PositionalLight>> & lights) {
+					const std::vector<std::shared_ptr<PositionalLight>> & lights, const bool attenuationIsOn[2], const glm::vec3 attenuationParams[2]) {
 	this->surfacesInScene = surfaces;
 	this->lightsInScene = lights;
 	for (int x = 0; x < colorBuffer.getWindowWidth(); x++) {
 		for (int y = 0; y < colorBuffer.getWindowHeight(); y++) {
 			setPerspectiveRayOriginAndDirection(x, y);
-			color C = traceIndividualRay(rayOrigin, rayDirection, lights);
+			color C = traceIndividualRay(rayOrigin, rayDirection, lights, attenuationIsOn, attenuationParams);
 			colorBuffer.setPixel(x, y, C);
 		}
 	}
 } // end raytraceScene
 
 color RayTracer::traceIndividualRay(const glm::vec3 &e, const glm::vec3 &d,
-	const std::vector < std::shared_ptr<PositionalLight>> &lights) {
+	const std::vector < std::shared_ptr<PositionalLight>> &lights, const bool attenuationIsOn[2],const glm::vec3 attenuationParams[2]) {
 	float distance = FLT_MAX;
 	HitRecord theHit;
+
 	for (unsigned int i = 0; i < surfacesInScene.size(); i++) {
 		HitRecord thisHit = surfacesInScene[i]->findClosestIntersection(e, d);
 		if (thisHit.t != FLT_MAX && thisHit.t < theHit.t) {
 			theHit = thisHit;
 		}
 	}
+
 	if (theHit.t == FLT_MAX) {
 		return defaultColor;
 	}
+
 	color result = color(0, 0, 0, 1);
 	for (unsigned int i = 0; i < lightsInScene.size(); i++) {
 		glm::vec3 shadowFeelerOrigin = theHit.interceptPoint + 0.01f * theHit.surfaceNormal;
 		glm::vec3 shadowFeelerDirection = glm::normalize(lightsInScene[i]->lightPosition - shadowFeelerOrigin);
 		HitRecord r = findIntersection(shadowFeelerOrigin, shadowFeelerDirection, surfacesInScene);
 		float dist = glm::distance(lightsInScene[i]->lightPosition, shadowFeelerOrigin);
-		result += lightsInScene[i]->illuminate(theHit, d, r.t < dist);
+
+		glm::vec3 attenuation;
+		if (attenuationIsOn[i]) {
+			attenuation = attenuationParams[i];
+		}
+		else {
+			attenuation = glm::vec3(1, 0, 0);
+		}
+
+		result += lightsInScene[i]->illuminate(theHit, d, r.t < dist, attenuation);
 	}
-	return result;
+
+	return result + theHit.material.materialAmbient;
 } // end traceRay

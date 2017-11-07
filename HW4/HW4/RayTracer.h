@@ -29,7 +29,7 @@ public:
 	* @param surfaces - list of the surfaces in the scene
 	* @param lights - list of the light sources in the scene
 	*/
-	void raytraceScene(const std::vector<std::shared_ptr<Surface>> & surfaces, const std::vector<std::shared_ptr<PositionalLight>> & lights);
+	void raytraceScene(const std::vector<std::shared_ptr<Surface>>& surfaces, const std::vector<std::shared_ptr<PositionalLight>>& lights, const bool attenuationIsOn[2], const glm::vec3 attenuationParams[2]);
 
 	/**
 	* Sets the w, u, and v orthonormal basis vectors associated with the coordinate
@@ -76,8 +76,7 @@ protected:
 	* @param d - unit length vector representing the direction of the ray
 	* @returns color for the point of intersection
 	*/
-	color traceIndividualRay(const glm::vec3 &e, const glm::vec3 &d,
-							const std::vector < std::shared_ptr<PositionalLight>> &lights);
+	color traceIndividualRay(const glm::vec3 & e, const glm::vec3 & d, const std::vector<std::shared_ptr<PositionalLight>>& lights, const bool attenuationIsOn[2], const glm::vec3 attenuationParams[2]);
 	/**
 	* Sets the rayOrigin and rayDirection data members of the class based on row and
 	* column of a specified pixel.These two data members together represent a

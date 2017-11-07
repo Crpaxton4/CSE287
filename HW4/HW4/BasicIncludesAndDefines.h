@@ -56,7 +56,17 @@ int solveQuadratic(float A, float B, float C, float roots[2]);
 
 
 struct Material {
-	color materialColor;
-	Material(const color &C=color(0.5f, 0.5f, 0.5f, 1.0f)) : materialColor(C) {
+	color materialAmbient;
+	color materialDiffuse;
+	color materialSpecular;
+	float shininess;
+	Material(const color &D = color(0.5f, 0.5f, 0.5f, 1.0f), 
+			const color &Sp = color(0.5f, 0.5f, 0.5f, 1.0f),
+			const float &Sh = 1,
+			const color &A = color(0.5f, 0.5f, 0.5f, 1.0f))
+		: materialAmbient(A), 
+			materialDiffuse(D), 
+			materialSpecular(Sp), 
+			shininess(Sh){
 	}
 };

@@ -1,0 +1,16 @@
+﻿  BasicIncludesAndDefines.cpp
+  CylinderY.cpp
+  Disk.cpp
+  FrameBuffer.cpp
+  Lab.cpp
+  Lights.cpp
+  Plane.cpp
+  Quadric.cpp
+  RayTracer.cpp
+  Sphere.cpp
+  Surface.cpp
+  Generating code
+  All 447 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  HW4.vcxproj -> C:\Users\Chris\Documents\College\2017-2018\Fall\CSE 287\CSE287-master-912831852d76181cc0e8247e09df1fc3a156daea\HW4\Release\HW4.exe
+  HW4.vcxproj -> C:\Users\Chris\Documents\College\2017-2018\Fall\CSE 287\CSE287-master-912831852d76181cc0e8247e09df1fc3a156daea\HW4\Release\HW4.pdb (Full PDB)
