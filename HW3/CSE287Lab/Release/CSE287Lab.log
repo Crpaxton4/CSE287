@@ -1,0 +1,30 @@
+﻿  BasicIncludesAndDefines.cpp
+  CylinderY.cpp
+  Disk.cpp
+  FrameBuffer.cpp
+  Lab.cpp
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\memory(901): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\memory(971): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<glm::tvec3<float,0>,int,glm::tvec4<float,0>>(glm::tvec3<float,0> &&,int &&,glm::tvec4<float,0> &&)' being compiled
+          with
+          [
+              _Ty=Sphere
+          ]
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\memory(971): note: see reference to function template instantiation 'std::_Ref_count_obj<_Ty>::_Ref_count_obj<glm::tvec3<float,0>,int,glm::tvec4<float,0>>(glm::tvec3<float,0> &&,int &&,glm::tvec4<float,0> &&)' being compiled
+          with
+          [
+              _Ty=Sphere
+          ]
+  Lab.cpp(192): note: see reference to function template instantiation 'std::shared_ptr<Sphere> std::make_shared<Sphere,glm::tvec3<float,0>,int,glm::tvec4<float,0>>(glm::tvec3<float,0> &&,int &&,glm::tvec4<float,0> &&)' being compiled
+  Lights.cpp
+  Plane.cpp
+  Quadric.cpp
+  RayTracer.cpp
+RayTracer.cpp(98): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+RayTracer.cpp(148): warning C4018: '<': signed/unsigned mismatch
+  Sphere.cpp
+  Surface.cpp
+  Generating code
+  All 394 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  CSE287Lab.vcxproj -> C:\Users\Chris\Documents\College\2017-2018\Fall\CSE 287\HW3\Release\CSE287Lab.exe
+  CSE287Lab.vcxproj -> C:\Users\Chris\Documents\College\2017-2018\Fall\CSE 287\HW3\Release\CSE287Lab.pdb (Full PDB)
