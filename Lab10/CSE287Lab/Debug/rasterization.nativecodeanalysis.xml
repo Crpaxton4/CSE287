@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\chris\documents\college\2017-2018\fall\cse 287\lab10\cse287lab\</FILEPATH>
+      <FILENAME>rasterization.cpp</FILENAME>
+      <LINE>169</LINE>
+      <COLUMN>13</COLUMN>
+    </SFA>
+    <DEFECTCODE>6246</DEFECTCODE>
+    <DESCRIPTION>Local declaration of 'x' hides declaration of the same name in outer scope. For additional information, see previous declaration at line '167' of 'c:\users\chris\documents\college\2017-2018\fall\cse 287\lab10\cse287lab\rasterization.cpp'.</DESCRIPTION>
+    <FUNCTION>midPointLine</FUNCTION>
+    <DECORATED>?midPointLine@@YAXUVertexData@@0@Z</DECORATED>
+    <FUNCLINE>90</FUNCLINE>
+    <PATH>
+      <SFA>
+        <FILEPATH>c:\users\chris\documents\college\2017-2018\fall\cse 287\lab10\cse287lab\</FILEPATH>
+        <FILENAME>rasterization.cpp</FILENAME>
+        <LINE>167</LINE>
+        <COLUMN>10</COLUMN>
+      </SFA>
+    </PATH>
+  </DEFECT>
+</DEFECTS>

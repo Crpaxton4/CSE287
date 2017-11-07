@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DEFECTS>
+  <DEFECT>
+    <SFA>
+      <FILEPATH>c:\users\chris\documents\college\2017-2018\fall\cse 287\lab10\cse287lab\</FILEPATH>
+      <FILENAME>pervertexoperations.cpp</FILENAME>
+      <LINE>87</LINE>
+      <COLUMN>21</COLUMN>
+    </SFA>
+    <DEFECTCODE>6246</DEFECTCODE>
+    <DESCRIPTION>Local declaration of 'i' hides declaration of the same name in outer scope. For additional information, see previous declaration at line '80' of 'c:\users\chris\documents\college\2017-2018\fall\cse 287\lab10\cse287lab\pervertexoperations.cpp'.</DESCRIPTION>
+    <FUNCTION>PerVertex::clipLineSegments</FUNCTION>
+    <DECORATED>?clipLineSegments@PerVertex@@KA?AV?$vector@UVertexData@@V?$allocator@UVertexData@@@std@@@std@@ABV23@@Z</DECORATED>
+    <FUNCLINE>74</FUNCLINE>
+    <PATH>
+      <SFA>
+        <FILEPATH>c:\users\chris\documents\college\2017-2018\fall\cse 287\lab10\cse287lab\</FILEPATH>
+        <FILENAME>pervertexoperations.cpp</FILENAME>
+        <LINE>80</LINE>
+        <COLUMN>25</COLUMN>
+      </SFA>
+    </PATH>
+  </DEFECT>
+</DEFECTS>

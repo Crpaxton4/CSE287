@@ -41,21 +41,21 @@ glm::mat4 S(float sx, float sy, float sz) {
 
 glm::mat4 S(float scale) {
 	// Fix this.
-	return glm::mat4();
+	return S(scale, scale, scale);
 }
 glm::mat4 Rx(float rads) {
 	// Fix this.
-	return glm::mat4();
+	return glm::rotate(rads, glm::vec3(1, 0, 0));
 }
 
 glm::mat4 Ry(float rads) {
 	// Fix this.
-	return glm::mat4();
+	return glm::rotate(rads, glm::vec3(0, 1, 0));
 }
 
 glm::mat4 Rz(float rads) {
 	// Fix this.
-	return glm::mat4();
+	return glm::rotate(rads, glm::vec3(0, 0, 1));
 }
 
 void renderObjects() {
@@ -65,19 +65,19 @@ void renderObjects() {
 	PerVertex::processTriangleVertices(planeTM, planeVertices);
 
 	// Will need to make changes below
-	glm::mat4 pyramidTM = glm::mat4();
+	glm::mat4 pyramidTM = T(3.0f, 0.0f, 1.0f) * Ry(angle);
 	PerVertex::processTriangleVertices(pyramidTM, pyramidVerts);
 	
-	glm::mat4 pyramidTM2 = glm::mat4();
+	glm::mat4 pyramidTM2 = T(0.0f, -3.0f, -2.0f) * Rz(angle) * T(0.0f, 3.0f, 0.0f) * Ry(angle);
 	PerVertex::processTriangleVertices(pyramidTM2, pyramidVerts);
 
-	glm::mat4 diskTM = glm::mat4();
+	glm::mat4 diskTM = T(0.0f, 3.0f, 0.0f) * Rx(angle);
 	PerVertex::processTriangleVertices(diskTM, diskVertices);
 
-	glm::mat4 coneTM = glm::mat4();
+	glm::mat4 coneTM = T(-2.0f, 1.0f, 2.0f) * Ry(angle);
 	PerVertex::processTriangleVertices(coneTM, coneVertices);
 
-	glm::mat4 coneTM2 = glm::mat4();
+	glm::mat4 coneTM2 = T(4.0f, 2.0f, -7.0f) * Rx(angle);
 	PerVertex::processTriangleVertices(coneTM2, coneVertices);
 }
 
@@ -191,15 +191,38 @@ std::vector<VertexData> makePyramidVertices(color pyramidColor, float width = 1.
 
 	// Set vertex locations for a pyramid
 
-	// Positive Z face
+	
 	float H2 = height / 2;
 	float W2 = width / 2;
 
-	pyramidVertices.push_back(VertexData(glm::vec4(0, H2, 0, 1), red));
+	// Positive Z face
+	pyramidVertices.push_back(VertexData(glm::vec4(0, H2, 0, 1), red)); // Top
 	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, W2, 1), red));
 	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, W2, 1), red));
 
-	// Need to add more triangles below.
+	// Negative Z Face
+	pyramidVertices.push_back(VertexData(glm::vec4(0, H2, 0, 1), pyramidColor));  // Top
+	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, -W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, -W2, 1), pyramidColor));
+
+	// Positive X Face
+	pyramidVertices.push_back(VertexData(glm::vec4(0, H2, 0, 1), pyramidColor));  // Top
+	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, -W2, 1), pyramidColor));
+
+	// Negative X Face
+	pyramidVertices.push_back(VertexData(glm::vec4(0, H2, 0, 1), pyramidColor));  // Top
+	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, -W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, W2, 1), pyramidColor));
+
+	// Base
+	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, -W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, W2, 1), pyramidColor));
+
+	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, -W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(-W2, -H2, W2, 1), pyramidColor));
+	pyramidVertices.push_back(VertexData(glm::vec4(W2, -H2, -W2, 1), pyramidColor));
 
 	return pyramidVertices;
 
@@ -208,10 +231,31 @@ std::vector<VertexData> makePyramidVertices(color pyramidColor, float width = 1.
 std::vector<VertexData> makeDiskVertices(color C, int DIV) {
 	std::vector<VertexData> verts;
 	// Finish this.
+
+	float theta_Deg = 360.0f / DIV;
+	float theta_rad = glm::radians(theta_Deg);
+
+	for (float i = 0; i < 360.0f; i += theta_Deg) {
+		float i_rad = glm::radians(i);
+		verts.push_back(VertexData(glm::vec4(glm::cos(i_rad), glm::sin(i_rad), 0, 1), C));
+		verts.push_back(VertexData(glm::vec4(glm::cos(i_rad + theta_rad), glm::sin(i_rad + theta_rad), 0, 1), C));
+		verts.push_back(VertexData(glm::vec4(0, 0, 0, 1), C));
+	}
+
 	return verts;
 }
 std::vector<VertexData> makeConeVertices(color C, int DIV) {
 	std::vector<VertexData> verts;
+
+	glm::vec4 top(0, 0, 1, 1);
+	std::vector<VertexData> baseVertices = makeDiskVertices(C, DIV);
+
+	for (int i = 0; i < baseVertices.size()-2; i++) {
+		verts.push_back(baseVertices[i]);
+		verts.push_back(baseVertices[i + 1]);
+		verts.push_back(VertexData(top, C));
+	}
+
 	// Finish this.
 	return verts;
 }
