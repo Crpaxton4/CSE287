@@ -1,0 +1,15 @@
+﻿  PerVertexOperations.cpp
+  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
+  Rasterization.cpp
+  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
+  PerFragmentOperations.cpp
+  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
+  Lab.cpp
+  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
+  FrameBuffer.cpp
+  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
+  BasicIncludesAndDefines.cpp
+  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
+  Generating Code...
+  CSE287Lab.vcxproj -> C:\Users\paxtoncr\Documents\CSE287\HW5\Debug\CSE287Lab.exe
+  CSE287Lab.vcxproj -> C:\Users\paxtoncr\Documents\CSE287\HW5\Debug\CSE287Lab.pdb (Full PDB)

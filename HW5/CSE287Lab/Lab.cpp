@@ -19,6 +19,14 @@ const int WIDTH = 10;
 const float WIDTH2 = WIDTH / 2.0f;
 const int DIV = 20;
 
+// float view_radius = 1;
+float view_azimuth = 0;
+float view_elevation = 0;
+
+bool pause = false;
+glm::vec3 eye_pos(0, 1, 0);
+glm::vec3 eye_movement_vector(1, 0, 0);
+
 // Frame buffer that contains both the color and depth buffers
 FrameBuffer frameBuffer(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -29,6 +37,8 @@ std::vector<VertexData> extrusion1Vertices;
 std::vector<VertexData> extrusion2Vertices;
 
 /********************** END GLOBALS ******************************/
+
+
 glm::mat4 T(float dx, float dy, float dz) {
 	return glm::translate(glm::vec3(dx, dy, dz));
 }
@@ -52,6 +62,16 @@ glm::mat4 Rz(float rads) {
 	return glm::rotate(rads, glm::vec3(0, 0, 1));
 }
 
+glm::vec3 sphereical_to_cartesian(float az, float el) {
+	glm::vec3 cart(0, 0, 0);
+
+	cart.x = glm::cos(el)*glm::sin(az);
+	cart.y = glm::sin(el);
+	cart.z = glm::cos(el)*glm::cos(az);
+
+	return cart;
+}
+
 void renderObjects() {
 	static glm::mat4 planeTM = T(0.0f, 0.0f, 0.0f);
 	PerVertex::modelingTransformation = planeTM;
@@ -70,13 +90,18 @@ void renderObjects() {
 * Acts as the display function for the window.
 */
 static void RenderSceneCB() {
-	glm::vec3 eyePosition(0, 1, 0);
-	glm::vec3 focusPt = eyePosition + glm::vec3(1, 0, 0);
-	glm::vec3 up(0, 1, 0);
-	PerVertex::viewingTransformation = glm::lookAt(eyePosition, focusPt, up);
+
+	glm::vec3 focusPt = eye_pos + eye_movement_vector;
+	glm::vec3 up(0, 1, 0); // TODO: Update up vector based on eye point and focus point
+	PerVertex::viewingTransformation = glm::lookAt(eye_pos, focusPt, up);
 	frameBuffer.clearColorAndDepthBuffers();
 	renderObjects();
 	frameBuffer.showColorBuffer();
+
+	eye_pos += 0.05f*eye_movement_vector; // Eye moves along the movement vector
+	
+	 
+
 }
 
 static void ResizeCB(int width, int height) {
@@ -106,10 +131,13 @@ static void KeyboardCB(unsigned char key, int x, int y) {
 	switch (key) {
 
 	case('p'): case('P'):
+		pause = !pause;
 		break;
 	case('r'): case('R'):
+
 		break;
 	case('c'): case('C'):
+
 		break;
 	case(27):
 		glutLeaveMainLoop();
@@ -120,16 +148,45 @@ static void KeyboardCB(unsigned char key, int x, int y) {
 
 } // end KeyboardCB
 
+void update_azimuth(const float radians) {
+	if (view_azimuth >= glm::radians(90.0f) && radians > 0) {
+		return;
+	}
+
+	if (view_azimuth <= glm::radians(60.0f) && radians < 0) {
+		return;
+	}
+
+	view_azimuth += radians;
+}
+
+void update_elavation(const float radians) {
+	if (view_azimuth >= glm::radians(90.0f) && radians > 0) {
+		return;
+	}
+
+	if (view_azimuth <= glm::radians(60.0f) && radians < 0) {
+		return;
+	}
+
+	view_azimuth += radians;
+}
+
 static void SpecialKeysCB(int key, int x, int y) {
 	static const float rotateInc = glm::radians(10.0f);
+
 	switch (key) {
 	case(GLUT_KEY_LEFT):
+		update_azimuth(glm::radians(-10.0f)); // decreace azimuth by 10 deg
 		break;
 	case(GLUT_KEY_RIGHT):
+		update_azimuth(glm::radians(10.0f)); // increace azimuth by 10 deg
 		break;
 	case(GLUT_KEY_UP):
+		update_elavation(glm::radians(10.0f)); // increace elevation by 10 deg
 		break;
 	case(GLUT_KEY_DOWN):
+		update_elavation(glm::radians(-10.0f)); // decreace elevation by 10 deg
 		break;
 	}
 
