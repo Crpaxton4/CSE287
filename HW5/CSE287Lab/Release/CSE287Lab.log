@@ -1,9 +1,0 @@
-﻿  Lab.cpp
-  GLM: GLM_SWIZZLE is deprecated, use GLM_FORCE_SWIZZLE instead
-  Generating code
-  1 of 448 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
-  Finished generating code
-  CSE287Lab.vcxproj -> C:\Users\paxtoncr\Documents\CSE287\HW5\Release\CSE287Lab.exe
-  CSE287Lab.vcxproj -> C:\Users\paxtoncr\Documents\CSE287\HW5\Release\CSE287Lab.pdb (Full PDB)
