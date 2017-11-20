@@ -42,7 +42,7 @@ std::vector<VertexData> extrusion2Vertices;
 /********************** END GLOBALS ******************************/
 
 void update_azimuth(const float radians) {
-
+	/*
 	if (view_azimuth + radians >= glm::radians(90.0f) && radians > 0) {
 		return;
 	}
@@ -51,6 +51,7 @@ void update_azimuth(const float radians) {
 		return;
 	}
 
+	*/
 	view_azimuth += radians;
 
 	std::cout <<  "Azimuth : " << view_azimuth << std::endl;
@@ -59,7 +60,7 @@ void update_azimuth(const float radians) {
 
 void update_elevation(const float radians) {
 
-	
+	/*
 
 	if (view_elevation + radians >= glm::radians(90.0f) && radians > 0) {
 		return;
@@ -68,6 +69,8 @@ void update_elevation(const float radians) {
 	if (view_elevation + radians <= glm::radians(-60.0f) && radians < 0) {
 		return;
 	}
+
+	*/
 
 	view_elevation += radians;
 	
@@ -84,6 +87,16 @@ glm::vec3 sphereical_to_cartesian(float az, float el) {
 	return glm::normalize(cart);
 }
 
+
+// returns (az, el)
+glm::vec2 cartesian_to_sphreical(glm::vec3 cart) {
+		
+	float az = std::atan2(cart.x, cart.z);
+	float el = std::atan2(cart.y, 1);
+
+	return glm::vec2(az, el);
+}
+
 void move_eye(glm::vec3 movement_vector) {
 	if (pause) {
 		return; // Don't move when paused
@@ -91,13 +104,13 @@ void move_eye(glm::vec3 movement_vector) {
 
 	glm::vec3 new_eye_pos = eye_pos + eye_movement_vector * SPEED_FACTOR;
 	
-	if (new_eye_pos.x <= -WIDTH / 2 || new_eye_pos.x >= WIDTH / 2 || new_eye_pos.z <= -WIDTH / 2 || new_eye_pos.z >= WIDTH / 2) {
-		return; // Don't move if moving will put eye off of the board
-	}
-	else {
+//	if (new_eye_pos.x <= -WIDTH / 2 || new_eye_pos.x >= WIDTH / 2 || new_eye_pos.z <= -WIDTH / 2 || new_eye_pos.z >= WIDTH / 2) {
+//		return; // Don't move if moving will put eye off of the board
+//	}
+//	else {
 		eye_pos = new_eye_pos; // Eye moves along the movement vector
 		eye_pos.y = 1; // Keep the eye height off the ground constant
-	}
+//	}
 	
 
 }
@@ -186,15 +199,23 @@ static void KeyboardCB(unsigned char key, int x, int y) {
 	case('p'): case('P'):
 		pause = !pause;
 		break;
+
 	case('r'): case('R'):
 		eye_view_vector = glm::normalize(eye_movement_vector); // Align the focus with the current movement
+		glm::vec2 sph = cartesian_to_sphreical(eye_view_vector);
+		
+		view_azimuth = sph.x;
+		view_elevation = sph.y;
 		break;
+
 	case('c'): case('C'):
 		eye_movement_vector = glm::normalize(eye_view_vector); // Aligns themovement with the view
 		break;
+
 	case(27): //ESC
 		glutLeaveMainLoop();
 		break;
+
 	}
 
 	glutPostRedisplay();
@@ -208,15 +229,19 @@ static void SpecialKeysCB(int key, int x, int y) {
 	case(GLUT_KEY_LEFT):
 		update_azimuth(glm::radians(10.0f)); // decreace azimuth by 10 deg
 		break;
+
 	case(GLUT_KEY_RIGHT):
 		update_azimuth(glm::radians(-10.0f)); // increace azimuth by 10 deg
 		break;
+
 	case(GLUT_KEY_UP):
 		update_elevation(glm::radians(10.0f)); // increace elevation by 10 deg
 		break;
+
 	case(GLUT_KEY_DOWN):
 		update_elevation(glm::radians(-10.0f)); // decreace elevation by 10 deg
 		break;
+
 	}
 
 	eye_view_vector = sphereical_to_cartesian(view_azimuth, view_elevation);
