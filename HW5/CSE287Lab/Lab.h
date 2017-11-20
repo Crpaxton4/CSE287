@@ -12,6 +12,10 @@
 * as event handlers.
 */
 
+void update_azimuth(const float radians);
+void update_elevation(const float radians);
+glm::vec3 sphereical_to_cartesian(float az, float el);
+
 /**
 * Acts as the display function for the window. It is called every
 * the window needs to be repainted.
