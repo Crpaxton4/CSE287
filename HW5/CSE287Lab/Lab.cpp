@@ -42,7 +42,7 @@ std::vector<VertexData> extrusion2Vertices;
 /********************** END GLOBALS ******************************/
 
 void update_azimuth(const float radians) {
-	/*
+	
 	if (view_azimuth + radians >= glm::radians(90.0f) && radians > 0) {
 		return;
 	}
@@ -51,7 +51,6 @@ void update_azimuth(const float radians) {
 		return;
 	}
 
-	*/
 	view_azimuth += radians;
 
 	std::cout <<  "Azimuth : " << view_azimuth << std::endl;
@@ -60,8 +59,6 @@ void update_azimuth(const float radians) {
 
 void update_elevation(const float radians) {
 
-	/*
-
 	if (view_elevation + radians >= glm::radians(90.0f) && radians > 0) {
 		return;
 	}
@@ -69,8 +66,6 @@ void update_elevation(const float radians) {
 	if (view_elevation + radians <= glm::radians(-60.0f) && radians < 0) {
 		return;
 	}
-
-	*/
 
 	view_elevation += radians;
 	
@@ -104,13 +99,13 @@ void move_eye(glm::vec3 movement_vector) {
 
 	glm::vec3 new_eye_pos = eye_pos + eye_movement_vector * SPEED_FACTOR;
 	
-//	if (new_eye_pos.x <= -WIDTH / 2 || new_eye_pos.x >= WIDTH / 2 || new_eye_pos.z <= -WIDTH / 2 || new_eye_pos.z >= WIDTH / 2) {
-//		return; // Don't move if moving will put eye off of the board
-//	}
-//	else {
+	if (new_eye_pos.x <= -WIDTH / 2 || new_eye_pos.x >= WIDTH / 2 || new_eye_pos.z <= -WIDTH / 2 || new_eye_pos.z >= WIDTH / 2) {
+		return; // Don't move if moving will put eye off of the board
+	}
+	else {
 		eye_pos = new_eye_pos; // Eye moves along the movement vector
 		eye_pos.y = 1; // Keep the eye height off the ground constant
-//	}
+	}
 	
 
 }
@@ -194,6 +189,7 @@ static void ResizeCB(int width, int height) {
 }
 
 static void KeyboardCB(unsigned char key, int x, int y) {
+	glm::vec2 sph; 
 	switch (key) {
 
 	case('p'): case('P'):
@@ -202,7 +198,7 @@ static void KeyboardCB(unsigned char key, int x, int y) {
 
 	case('r'): case('R'):
 		eye_view_vector = glm::normalize(eye_movement_vector); // Align the focus with the current movement
-		glm::vec2 sph = cartesian_to_sphreical(eye_view_vector);
+		sph = cartesian_to_sphreical(eye_view_vector);
 		
 		view_azimuth = sph.x;
 		view_elevation = sph.y;
@@ -283,9 +279,56 @@ std::vector<VertexData> makePlaneVertices() {	// for checkerboard
 std::vector<VertexData> makeExtrusionVertices(const std::vector<glm::vec2> &V, const color &C) {
 	// FIX THIS
 	std::vector<VertexData> verts;
-	verts.push_back(VertexData(glm::vec4(0, 0, 0, 1), C));
-	verts.push_back(VertexData(glm::vec4(1, 1, 0, 1), C));
-	verts.push_back(VertexData(glm::vec4(0, 1, 0, 1), C));
+
+	// Create inital connecting face
+	verts.push_back(VertexData(glm::vec4(V[0], 0, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[0], -1, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[1], -1, 1), C));
+
+	verts.push_back(VertexData(glm::vec4(V[1], -1, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[1], 0, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[0], 0, 1), C));
+
+	
+	
+
+
+
+	for (int i = 1; i < V.size()-1; i++) {
+
+		// Origional Face
+		verts.push_back(VertexData(glm::vec4(V[0], 0, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i], 0, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i+1], 0, 1), C));
+
+		// Extruded Face (Reversed order of addition to flip 'front' of triangle)
+		verts.push_back(VertexData(glm::vec4(V[i+1], -1, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i], -1, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[0], -1, 1), C));
+
+		// Connecting Face
+		verts.push_back(VertexData(glm::vec4(V[i], 0, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i], -1, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i+1], -1, 1), C));
+
+		verts.push_back(VertexData(glm::vec4(V[i+1], -1, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i+1], 0, 1), C));
+		verts.push_back(VertexData(glm::vec4(V[i], 0, 1), C));
+		
+	}
+
+	// Create closing connecting face
+	int last = V.size() - 1;
+	verts.push_back(VertexData(glm::vec4(V[0], 0, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[0], -1, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[last], -1, 1), C));
+
+	verts.push_back(VertexData(glm::vec4(V[last], -1, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[last], 0, 1), C));
+	verts.push_back(VertexData(glm::vec4(V[0], 0, 1), C));
+	
+	
+
 	return verts;
 }
 
